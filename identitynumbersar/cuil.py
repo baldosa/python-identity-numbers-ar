@@ -24,17 +24,13 @@ def check_digit(cuil):
     Valida dígito verificador de un cuil "limpio" previo check
     """
     cuil = str(cuil)
-    try:
-        is_valid(cuil)
-        digitos = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
-        check = sum(d * int(c) for d, c in zip(digitos, cuil)) % 11
+    digitos = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+    check = sum(d * int(c) for d, c in zip(digitos, cuil)) % 11
 
-        if (cuil[-1] == '012345678990'[11 - check]):
-            return True
-        else:
-            return False
-    except Exception as e:
-        print(e)
+    if (cuil[-1] == '012345678990'[11 - check]):
+        return True
+    else:
+        return False
 
 def score_format(cuil):
     """
