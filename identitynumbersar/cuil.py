@@ -10,14 +10,19 @@ Mas info:
 """
 import re
 
-cuil_starts = [ '20', '23', '24', '27', '30', '33' ]
+cuil_starts = ["20", "23", "24", "27", "30", "33"]
+
 
 def clean(cuil):
     """
     Saca todos los caracteres no numericos del valor
     """
-    cuil = str(cuil)
+    if isinstance(cuil, float):
+        cuil = str(int(cuil))
+    else:
+        cuil = str(cuil)
     return re.sub("[^0-9]", "", cuil)
+
 
 def check_digit(cuil):
     """
@@ -27,10 +32,11 @@ def check_digit(cuil):
     digitos = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
     check = sum(d * int(c) for d, c in zip(digitos, cuil)) % 11
 
-    if (cuil[-1] == '012345678990'[11 - check]):
+    if cuil[-1] == "012345678990"[11 - check]:
         return True
     else:
         return False
+
 
 def score_format(cuil):
     """
@@ -39,39 +45,37 @@ def score_format(cuil):
     cuil = str(cuil)
     try:
         is_valid(cuil)
-        return f'{cuil[0:2]}-{cuil[2:10]}-{cuil[-1]}'
+        return f"{cuil[0:2]}-{cuil[2:10]}-{cuil[-1]}"
     except Exception as e:
         print(e)
-    
+
+
 def is_valid(cuil):
     """
     Valida que el número parezca un CUIL válido
     """
     cuil = str(cuil)
-    
+
     if len(cuil) != 11:
-        raise Exception('Cantidad incorrecta de caracteres')
+        raise Exception("Cantidad incorrecta de caracteres")
 
     if len(re.sub("[0-9]", "", cuil)) > 0:
-        raise Exception('Hay caracteres no numéricos')
+        raise Exception("Hay caracteres no numéricos")
 
     if not check_digit(cuil):
-        raise Exception('Dígito verificador inválido')
+        raise Exception("Dígito verificador inválido")
 
     if cuil[0:2] not in cuil_starts:
-        raise Exception('Los números iniciales son incorrectos')
+        raise Exception("Los números iniciales son incorrectos")
 
     return True
 
+
 def gen_dni(cuil):
-    """Devuelve el DNI de un CUIL "válido"
-    """
+    """Devuelve el DNI de un CUIL "válido" """
     cuil = str(cuil)
     try:
         is_valid(cuil)
         return cuil[2:10]
     except Exception as e:
         print(e)
-
-    
-
